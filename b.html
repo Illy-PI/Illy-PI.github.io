@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webvr - cubes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #101010;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			a {
+				color: #f00;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="./css/main.css"></link>
+	</head>
+	<body>
+
+		<script src="./scripts/three.js"></script>		
+		<script type="text/javascript" src="./scripts/jquery-1.11.3.min.js"></script>
+
+		<!-- <script src="./scripts/IllyVizNoAudio.js"></script> -->
+		<script src="./scripts/IllyViz.js"></script>
+		<script src="./scripts/IllySynth.js"></script>
+		<script type="text/javascript" src="./scripts/IllyAudio.js"></script>
+		<script type="text/javascript" src="./scripts/volume-meter.js"></script>
+
+		<script src="./scripts/WebVR/controls/VRControls.js"></script>
+		<script src="./scripts/WebVR/effects/VREffect.js"></script>
+		<script src="./scripts/WebVR/WebVR.js"></script>
+
+		<script type="text/javascript">
+        $(document).ready(function(){    
+        		PitchDetection.start();        
+            Viz.init();        
+        });
+    </script>
+    <div id="pi_face" style="text-align: center"></div>
+    <canvas id="eq" class="visualizer"></canvas> 
+
+
+	</body>
+</html>
