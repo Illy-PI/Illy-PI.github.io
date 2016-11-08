@@ -735,6 +735,10 @@ var Viz = function(){
 		IllyAudio.externalListen();
 	};
 
+	var setLocationMultiplier = function(new_multiplier){
+		LOCATION_MULTIPLIER = new_multiplier;
+	}
+
 	// public methods
 	return{
 		init: init,
@@ -750,6 +754,7 @@ var Viz = function(){
 		Respond: Respond,
 		getCurrentState: getCurrentState,
 		STATE: STATE,
-		getRepositionState: getRepositionState
+		getRepositionState: getRepositionState,
+		setLocationMultiplier: setLocationMultiplier
 	}
 }();
