@@ -20,8 +20,8 @@ var Viz = function(){
 	var CAMERA_MOVEMENT_SPEED = 0.05;
 
 	var SIZE_MULTIPLIER = 0.5;
-
 	var LOCATION_MULTIPLIER = 2;
+	var VIVE_SCALE = 0.6;
 
 	var scene_width = window.innerWidth;
 	var scene_height = window.innerHeight;
@@ -635,7 +635,7 @@ var Viz = function(){
 		}
 
 
-		pp_particle_size = PingPong(outer_rings.material.size, 0.001, 0, 0.8 * SIZE_MULTIPLIER, pingpong_states[5]);
+		pp_particle_size = PingPong(outer_rings.material.size, 0.001 * VIVE_SCALE, 0, 0.8 * SIZE_MULTIPLIER * VIVE_SCALE, pingpong_states[5]);
 		pingpong_states[5] = pp_particle_size.state;
 		outer_rings.material.size = pp_particle_size.value;
 	}
