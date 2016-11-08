@@ -255,7 +255,7 @@ var Viz = function(){
 		mesh_material = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
 		sphere_material = new THREE.PointsMaterial( {
 			color: 0x102040, 
-			size: 0.6, 
+			size: 0.6 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
@@ -264,7 +264,7 @@ var Viz = function(){
 		});
 		point_cloud_material = new THREE.PointsMaterial( {
 			color: 0xf0f0f0, 
-			size: 0.05, 
+			size: 0.05 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
@@ -273,7 +273,7 @@ var Viz = function(){
 		});
 		var shell_material = new THREE.MeshBasicMaterial({
 			color: 0x101010, 
-			size: 0.1, 
+			size: 0.1 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
@@ -284,7 +284,7 @@ var Viz = function(){
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/iris.png'),
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/cloud.png'),
 			color: 0xff3010, 
-			size: 0.5, 
+			size: 0.5 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
