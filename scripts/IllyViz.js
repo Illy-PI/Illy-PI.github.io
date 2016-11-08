@@ -19,6 +19,8 @@ var Viz = function(){
 
 	var CAMERA_MOVEMENT_SPEED = 0.05;
 
+	var LOCATION_MULTIPLIER = 2;
+
 	var scene_width = window.innerWidth;
 	var scene_height = window.innerHeight;
 
@@ -67,6 +69,8 @@ var Viz = function(){
 	var opening_wait_time_target = 30;
 
 	// flags
+	var reverse_action = true;
+
 	var pingpong_states = [true, true, true, true, true, true];
 
 	var current_state = STATE.OPEN;
@@ -87,6 +91,26 @@ var Viz = function(){
 			z: 0
 		}
 	};
+
+	if(reverse_action){
+		camera_angle = {
+			current: {
+				x: Math.PI/2,
+				y: Math.PI/2,
+				z: 180
+			},
+			default:{
+				x: Math.PI/2,
+				y: Math.PI/2,
+				z: 180
+			},
+			listening:{
+				x: Math.PI/2,
+				y: Math.PI/2,
+				z: 180
+			}
+		};
+	}
 
 
 	var PingPong = function(input, delta, min, max, state){
@@ -124,6 +148,9 @@ var Viz = function(){
 	// VR
 	var controls;
 	var effect;
+	// Vive
+	var controller1, controller2;
+	var room;
 
 	var onWindowResize = function() {
 		perspective_camera.aspect = window.innerWidth / window.innerHeight;
@@ -148,13 +175,48 @@ var Viz = function(){
 
 		// camera
 		perspective_camera = new THREE.PerspectiveCamera(FOV, scene_width/scene_height, MINIMUM_DISTANCE, MAXIMUM_DISTANCE);
-		// perspective_camera.position.z = 3 * Math.cos(camera_angle.default.z);
-		// perspective_camera.position.y = 3 * Math.cos(camera_angle.default.y);
-		// perspective_camera.position.x = 3 * Math.cos(camera_angle.default.x);
-		// perspective_camera.lookAt(new THREE.Vector3(0,0,0));
+		
+		if(reverse_action){
+			perspective_camera.position.z = 10;
+			perspective_camera.position.y = 0;
+			perspective_camera.position.x = 0;
+			perspective_camera.lookAt(new THREE.Vector3(0,0,0));
+		}
+		else{
+			perspective_camera.position.z = LOCATION_MULTIPLIER * Math.cos(camera_angle.default.z);
+			perspective_camera.position.y = LOCATION_MULTIPLIER * Math.cos(camera_angle.default.y);
+			perspective_camera.position.x = LOCATION_MULTIPLIER * Math.cos(camera_angle.default.x);
+			perspective_camera.lookAt(new THREE.Vector3(0,0,0));
+		}
 
 		controls = new THREE.VRControls( perspective_camera );
         effect = new THREE.VREffect( renderer );
+
+        // Vive Controls
+        // controllers
+		controller1 = new THREE.ViveController( 0 );
+		controller1.standingMatrix = controls.getStandingMatrix();
+		scene.add( controller1 );
+		controller2 = new THREE.ViveController( 1 );
+		controller2.standingMatrix = controls.getStandingMatrix();
+		scene.add( controller2 );
+		var loader = new THREE.OBJLoader();
+		loader.setPath( 'models/obj/vive-controller/' );
+		loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
+			var loader = new THREE.TextureLoader();
+			loader.setPath( 'models/obj/vive-controller/' );
+			var controller = object.children[ 0 ];
+			controller.material.map = loader.load( 'onepointfive_texture.png' );
+			controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+			controller1.add( object.clone() );
+			controller2.add( object.clone() );
+		} );
+
+		controller1.addEventListener( 'triggerdown', onViveTriggerDown );
+		controller1.addEventListener( 'triggerup', onViveTriggerUp );
+
+		controller2.addEventListener( 'triggerdown', onViveTriggerDown );
+		controller2.addEventListener( 'triggerup', onViveTriggerUp );
 
 		if ( WEBVR.isLatestAvailable() === false ) {
             document.body.appendChild( WEBVR.getMessage() );
@@ -245,15 +307,18 @@ var Viz = function(){
 			outer_rings.geometry.vertices[i].y = 0;
 		}
 		outer_rings.geometry.verticesNeedUpdate = true;
-		outer_rings.position.z = -3;
+		// outer_rings.position.z = -3;
 		scene.add(outer_rings );
 		shell.material.opacity = 0;
-		shell.position.z = -3;
+		// shell.position.z = -3;
 		scene.add(shell);
 		point_cloud.material.opacity = 0;
-		point_cloud.position.z = -3;
+		// point_cloud.position.z = -3;
 		scene.add(point_cloud);
 
+		if(reverse_action){
+			moveIlly(LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z));
+		}
 
 		// var controls = new THREE.OrbitControls(perspective_camera, renderer.domElement);
 	
@@ -304,10 +369,15 @@ var Viz = function(){
 					camera_angle.current.x = camera_angle.listening.x;
 				}
 
-				// perspective_camera.position.x = 3 * Math.cos(camera_angle.current.x);
-				// perspective_camera.position.z = 3 * Math.cos(camera_angle.current.z);
-				// perspective_camera.position.y = 3 * Math.cos(camera_angle.current.y);
-				// perspective_camera.lookAt(new THREE.Vector3(0,0,0));
+				if(reverse_action){
+					moveIlly(LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z));
+				}
+				else{
+					perspective_camera.position.x = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x);
+					perspective_camera.position.z = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z);
+					perspective_camera.position.y = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y);
+					perspective_camera.lookAt(new THREE.Vector3(0,0,0));	
+				}	
 			}
 			else if(current_state == STATE.RESPOND){
 				// move camera to default
@@ -364,11 +434,15 @@ var Viz = function(){
 					reposition = true;
 				}
 
-				// perspective_camera.position.x = 3 * Math.cos(camera_angle.current.x);
-				// perspective_camera.position.z = 3 * Math.cos(camera_angle.current.z);
-				// perspective_camera.position.y = 3 * Math.cos(camera_angle.current.y);
-
-				// perspective_camera.lookAt(new THREE.Vector3(0,0,0));
+				if(reverse_action){
+					moveIlly(LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z));
+				}
+				else{
+					perspective_camera.position.x = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x);
+					perspective_camera.position.z = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z);
+					perspective_camera.position.y = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y);
+					perspective_camera.lookAt(new THREE.Vector3(0,0,0));	
+				}	
 
 				defaultAction(timeDelta-opening_time);
 			}
@@ -380,6 +454,8 @@ var Viz = function(){
 			effect.requestAnimationFrame(update);
 
 			controls.update();
+			controller1.update();
+			controller2.update();
 			effect.render( scene, perspective_camera );
 		}
 
@@ -627,7 +703,35 @@ var Viz = function(){
 
 	var getRepositionState = function(){
 		return reposition;
-	}
+	};
+
+	var moveIlly = function(x,y,z){
+		core.position.x = x;
+		core.position.y = y;
+		core.position.z = z;
+
+		shell.position.x = x;
+		shell.position.y = y;
+		shell.position.z = z;
+
+		point_cloud.position.x = x;
+		point_cloud.position.y = y;
+		point_cloud.position.z = z;
+
+		outer_rings.position.x = x;
+		outer_rings.position.y = y;
+		outer_rings.position.z = z;
+	};
+
+	var onViveTriggerUp = function(){
+		// console.log("This is up");
+		IllyAudio.externalListen();
+	};
+
+	var onViveTriggerDown = function(){
+		// console.log("This is down");
+		IllyAudio.externalReply();
+	};
 
 	// public methods
 	return{

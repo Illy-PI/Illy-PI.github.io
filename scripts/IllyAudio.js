@@ -19,7 +19,7 @@
 // timbre
 // if did not understand anything
 // too short/long
-PitchDetection = function() {
+IllyAudio = function() {
 	var context;
 	var source;
 	var analyser;
@@ -123,8 +123,8 @@ PitchDetection = function() {
 
 		//main block for doing the audio recording
 		if (navigator.getUserMedia) {
-			console.log('getUserMedia supported.');
-			alert('getUserMedia supported');
+			// console.log('getUserMedia supported.');
+			// alert('getUserMedia supported');
 			navigator.getUserMedia (
 				// constraints - only audio needed for this app
 				{
@@ -188,21 +188,21 @@ PitchDetection = function() {
 			}
 		});
 
-		document.addEventListener("mousedown", function(event){
-			// // alert("mouse down");
-			if(!oscillator_playing) { //
-				//listen
-				listen();
-			}
-		});
+		// document.addEventListener("mousedown", function(event){
+		// 	// // alert("mouse down");
+		// 	if(!oscillator_playing) { //
+		// 		//listen
+		// 		listen();
+		// 	}
+		// });
 
-		document.addEventListener("mouseup", function(event){
-			// alert("mouse up");
-			if(!oscillator_playing) { //
-				//listen
-				reply();
-			}
-		});
+		// document.addEventListener("mouseup", function(event){
+		// 	// alert("mouse up");
+		// 	if(!oscillator_playing) { //
+		// 		//listen
+		// 		reply();
+		// 	}
+		// });
 
 		// document.getElementById("nav").addEventListener('click', function(){
 		// 	// alert("asda");
@@ -705,9 +705,24 @@ PitchDetection = function() {
 		return output;
 	};
 
+	var externalListen = function(){
+		if(!oscillator_playing) { 
+			listen();
+		}
+	};
+
+	var externalReply = function(){
+		if(oscillator_playing) {
+			//listen
+			reply();
+		}
+	};
+
 
 	return {
-		start: start
+		start: start,
+		externalListen: externalListen,
+		externalReply: externalReply,
 	}
 
 }();
