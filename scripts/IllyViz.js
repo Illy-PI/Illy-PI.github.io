@@ -725,12 +725,12 @@ var Viz = function(){
 
 	var onViveTriggerUp = function(){
 		// console.log("This is up");
-		IllyAudio.externalListen();
+		IllyAudio.externalReply();
 	};
 
 	var onViveTriggerDown = function(){
 		// console.log("This is down");
-		IllyAudio.externalReply();
+		IllyAudio.externalListen();
 	};
 
 	// public methods
