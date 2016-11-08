@@ -19,6 +19,8 @@ var Viz = function(){
 
 	var CAMERA_MOVEMENT_SPEED = 0.05;
 
+	var SIZE_MULTIPLIER = 0.5;
+
 	var LOCATION_MULTIPLIER = 2;
 
 	var scene_width = window.innerWidth;
@@ -228,23 +230,23 @@ var Viz = function(){
         window.addEventListener( 'resize', onWindowResize, false );
 
 		// geometries
-		sphere_geometry = new THREE.SphereGeometry( 1, 16, 16, 0, Math.PI*2*15/16, 0, Math.PI*2*15/16 );		
+		sphere_geometry = new THREE.SphereGeometry( 1 * SIZE_MULTIPLIER, 16, 16, 0, Math.PI*2*15/16, 0, Math.PI*2*15/16 );		
 
 		point_cloud_geometry = new THREE.Geometry();
 		for (var i = 0; i < 1000; i++){
 			point_cloud_geometry.vertices.push(new THREE.Vector3(
-				(Math.random() -0.5),
-				(Math.random() -0.5),
-				(Math.random() -0.5)
+				(Math.random() -0.5) * SIZE_MULTIPLIER,
+				(Math.random() -0.5) * SIZE_MULTIPLIER,
+				(Math.random() -0.5) * SIZE_MULTIPLIER
 			));
 		};
 
-		shell_geometry = new THREE.SphereGeometry(1, 40, 20, 0, Math.PI*2, Math.PI/4, Math.PI/2);
+		shell_geometry = new THREE.SphereGeometry(1 * SIZE_MULTIPLIER, 40, 20, 0, Math.PI*2, Math.PI/4, Math.PI/2);
 		shell_geometry.vertices.forEach(function(v){
 			v.multiplyScalar(Math.random());
 		});
 
-		core_geometry = new THREE.SphereGeometry(0.2, 16, 16);//, 0, Math.PI*2, Math.PI/4, Math.PI/2);
+		core_geometry = new THREE.SphereGeometry(0.2 * SIZE_MULTIPLIER, 16, 16);//, 0, Math.PI*2, Math.PI/4, Math.PI/2);
 		// core_geometry.vertices.forEach(function(v){
 		// 	v.multiplyScalar(Math.random());
 		// });
