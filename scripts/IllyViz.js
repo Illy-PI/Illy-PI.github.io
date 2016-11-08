@@ -635,7 +635,7 @@ var Viz = function(){
 		}
 
 
-		pp_particle_size = PingPong(outer_rings.material.size, 0.001, 0, 0.8, pingpong_states[5]);
+		pp_particle_size = PingPong(outer_rings.material.size, 0.001, 0, 0.8 * SIZE_MULTIPLIER, pingpong_states[5]);
 		pingpong_states[5] = pp_particle_size.state;
 		outer_rings.material.size = pp_particle_size.value;
 	}
@@ -735,9 +735,14 @@ var Viz = function(){
 		IllyAudio.externalListen();
 	};
 
+	// for quick debug for VR
 	var setLocationMultiplier = function(new_multiplier){
 		LOCATION_MULTIPLIER = new_multiplier;
-	}
+	};
+
+	var setGlobalScale = function(new_scale){
+		SIZE_MULTIPLIER = new_scale;
+	};
 
 	// public methods
 	return{
@@ -755,6 +760,7 @@ var Viz = function(){
 		getCurrentState: getCurrentState,
 		STATE: STATE,
 		getRepositionState: getRepositionState,
-		setLocationMultiplier: setLocationMultiplier
+		setLocationMultiplier: setLocationMultiplier,
+		setGlobalScale: setGlobalScale
 	}
 }();
