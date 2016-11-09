@@ -100,17 +100,17 @@ var Viz = function(){
 			current: {
 				x: Math.PI/2,
 				y: Math.PI/2,
-				z: 180
+				z: Math.PI
 			},
 			default:{
 				x: Math.PI/2,
 				y: Math.PI/2,
-				z: 180
+				z: Math.PI
 			},
 			listening:{
 				x: Math.PI/2,
 				y: Math.PI/2,
-				z: 180
+				z: Math.PI
 			}
 		};
 	}
@@ -153,7 +153,6 @@ var Viz = function(){
 	var effect;
 	// Vive
 	var controller1, controller2;
-	var room;
 
 	var onWindowResize = function() {
 		perspective_camera.aspect = window.innerWidth / window.innerHeight;
@@ -180,7 +179,7 @@ var Viz = function(){
 		perspective_camera = new THREE.PerspectiveCamera(FOV, scene_width/scene_height, MINIMUM_DISTANCE, MAXIMUM_DISTANCE);
 		
 		if(reverse_action){
-			perspective_camera.position.z = 10;
+			perspective_camera.position.z = 0;
 			perspective_camera.position.y = 0;
 			perspective_camera.position.x = 0;
 			perspective_camera.lookAt(new THREE.Vector3(0,0,0));
@@ -672,9 +671,19 @@ var Viz = function(){
 		camera_angle.listening.y = Math.random() * 2 * Math.PI - Math.PI;
 		camera_angle.listening.z = Math.random() * 2 * Math.PI - Math.PI;
 
-		console.log(camera_angle.listening);
-		console.log('vs');
-		console.log(camera_angle.default);
+		// console.log("----------");
+		// console.log(camera_angle.listening.x * (360/(Math.PI*2)));
+		// console.log('vs');
+		// console.log(camera_angle.default.x * (360/(Math.PI*2)));
+
+		// console.log(camera_angle.listening.y * (360/(Math.PI*2)));
+		// console.log('vs');
+		// console.log(camera_angle.default.y * (360/(Math.PI*2)));
+
+		// console.log(camera_angle.listening.z * (360/(Math.PI*2)));
+		// console.log('vs');
+		// console.log(camera_angle.default.z * (360/(Math.PI*2)));
+		// console.log("----------");
 	};
 
 	var Respond = function(){
@@ -693,6 +702,7 @@ var Viz = function(){
 		// core.scale.x = new_size;
 		// core.scale.y = new_size;
 		// core.scale.z = new_size;
+		new_size *= SIZE_MULTIPLIER;
 		core.scale.set(new_size, new_size, new_size);
 	};
 

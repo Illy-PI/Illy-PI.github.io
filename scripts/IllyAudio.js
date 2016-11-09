@@ -2,7 +2,7 @@
 //v0.045
 
 // TODO
-// opening sound
+// add variety through response modes
 // make sure harmonics are legit,
 // improve dnu response
 // refactor controls and visuals out
@@ -15,6 +15,7 @@
 // pitch rotation toooo fast
 
 // Done
+// opening sound
 // Viz.setShellMaterialColor("0x101010"); for harmonics 100000, 001000, 000010
 // timbre
 // if did not understand anything
@@ -85,6 +86,18 @@ IllyAudio = function() {
 
 	// UI
 	var illy_visible = true;
+
+
+	// reponse modes
+	var short_response;
+	var arpeggiator;
+	var RESPONSE_MODES = {
+		NORMAL : 0,
+		SHORT: 1,
+		LONG: 2,
+		ARPEGGIATE: 3
+	};
+	var current_response_mode = 0;
 
 	/**
 	* public
@@ -238,6 +251,10 @@ IllyAudio = function() {
 
 	var listen = function(){
 		if(Viz.getCurrentState() == Viz.STATE.WAIT){
+			short_response = Math.random();
+			current_response_mode = Math.floor((Math.random() * 4.99));
+			console.log('current_response_mode', current_response_mode);
+			arpeggiator = Math.random();
 			memory_pitch = [];
 			memory_h0 = [];
 			memory_h1 = [];
@@ -570,12 +587,47 @@ IllyAudio = function() {
 
 		if(isListening){
 			if(pitch != -1){
-		    	memory_pitch.push(pitch);
-		    	average_pitch += pitch;
-		    	memory_volume.push(meter.volume);
-		    	// console.log('here', pitch);
+				var short_response = Math.random();
+				// if(short_response > 0.1){
+			    	
+			    	//
+			    	// new stuff!
+			    	// 
+			    	if(current_response_mode == RESPONSE_MODES.NORMAL){
+			    		memory_pitch.push(pitch);
+			    	}
+			    	else if(current_response_mode == RESPONSE_MODES.SHORT){
+			    		if(Math.random > 0.5){
+			    			memory_pitch.push(pitch);
+			    		}
+			    	}
+			    	else if(current_response_mode == RESPONSE_MODES.LONG){
+			    		memory_pitch.push(pitch);
+			    		memory_pitch.push(pitch);
+			    		memory_pitch.push(pitch);
+			    		memory_pitch.push(pitch);
+			    		memory_pitch.push(pitch);
+			    	}
+			    	else if(current_response_mode == RESPONSE_MODES.ARPEGGIATE){
+			    		memory_pitch.push(pitch);
+			    		if(arpeggiator < 0.20){
+				    		memory_pitch.push(pitch / 1.3);
+				    		memory_pitch.push(pitch / 1.5);
+				    	}
+				    	else if(arpeggiator < 0.40){
+				    		memory_pitch.push(pitch * 1.3);
+				    		memory_pitch.push(pitch * 1.5);
+				    	}
+			    	}			    	
+			    	//
+			    	// new stuff
+			    	//
+			    	average_pitch += pitch;
+			    	memory_volume.push(meter.volume);
+			    	// console.log('here', pitch);
 
-		    	average_volume += meter.volume;
+			    	average_volume += meter.volume;
+		    	// }
 		  	}
 		  	else {
 		    	// memory_pitch.push(0);
