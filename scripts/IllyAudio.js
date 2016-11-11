@@ -620,7 +620,10 @@ IllyAudio = function() {
 				    		memory_pitch.push(pitch * 1.3);
 				    		memory_pitch.push(pitch * 1.5);
 				    	}
-			    	}			    	
+			    	}		
+			    	else{
+			    		memory_pitch.push(pitch);
+			    	}	    	
 			    	//
 			    	// new stuff
 			    	//
