@@ -89,7 +89,7 @@ IllyAudio = function() {
 
 
 	// reponse modes
-	var short_response;
+	var short_response = 0;
 	var arpeggiator;
 	var RESPONSE_MODES = {
 		NORMAL : 0,
@@ -251,7 +251,6 @@ IllyAudio = function() {
 
 	var listen = function(){
 		if(Viz.getCurrentState() == Viz.STATE.WAIT){
-			short_response = Math.random();
 			current_response_mode = Math.floor((Math.random() * 4.99));
 			console.log('current_response_mode', current_response_mode);
 			arpeggiator = Math.random();
@@ -587,7 +586,6 @@ IllyAudio = function() {
 
 		if(isListening){
 			if(pitch != -1){
-				var short_response = Math.random();
 				// if(short_response > 0.1){
 			    	
 			    	//
@@ -597,8 +595,12 @@ IllyAudio = function() {
 			    		memory_pitch.push(pitch);
 			    	}
 			    	else if(current_response_mode == RESPONSE_MODES.SHORT){
-			    		if(Math.random > 0.5){
+			    		if(short_response == 0){
 			    			memory_pitch.push(pitch);
+			    			short_response = 1;
+			    		}
+			    		else{
+			    			short_response = 0;
 			    		}
 			    	}
 			    	else if(current_response_mode == RESPONSE_MODES.LONG){
