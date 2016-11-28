@@ -349,7 +349,7 @@ var Viz = function(){
 
 
 		room = new THREE.Mesh(
-			new THREE.BoxGeometry( 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER ),
+			new THREE.BoxGeometry( 5 * LOCATION_MULTIPLIER, 5 * LOCATION_MULTIPLIER, 5 * LOCATION_MULTIPLIER ),
 			new THREE.MeshBasicMaterial({
 				map: room_texture,
 				side: THREE.BackSide
