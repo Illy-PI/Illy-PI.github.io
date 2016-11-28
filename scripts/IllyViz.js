@@ -153,6 +153,7 @@ var Viz = function(){
 	var effect;
 	// Vive
 	var controller1, controller2;
+	var room;
 
 	var onWindowResize = function() {
 		perspective_camera.aspect = window.innerWidth / window.innerHeight;
@@ -317,6 +318,47 @@ var Viz = function(){
 		point_cloud.material.opacity = 0;
 		// point_cloud.position.z = -3;
 		scene.add(point_cloud);
+
+		// Add a repeating grid as a skybox.
+		// var boxSize = LOCATION_MULTIPLIER * 2;
+		// var loader = new THREE.TextureLoader();
+		// loader.load('../assets/images/iris.png', onTextureLoaded);
+		// function onTextureLoaded(texture) {
+		// 	texture.wrapS = THREE.RepeatWrapping;
+		// 	texture.wrapT = THREE.RepeatWrapping;
+		// 	texture.repeat.set(boxSize, boxSize);
+		// 	var geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+		// 	var material = new THREE.MeshBasicMaterial({
+		// 		map: texture,
+		// 		color: 0x01BE00,
+		// 		side: THREE.BackSide
+		// 	});
+		// 	// Align the skybox to the floor (which is at y=0).
+		// 	room = new THREE.Mesh(geometry, material);
+		// 	room.position.y = boxSize/2;
+		// 	scene.add(room);
+		// 	// For high end VR devices like Vive and Oculus, take into account the stage
+		// 	// parameters provided.
+		// 	// setupStage();
+		// }
+
+		var room_texture =new THREE.TextureLoader().load( "../assets/images/bg.png" );
+		room_texture.wrapS = THREE.RepeatWrapping;
+		room_texture.wrapT = THREE.RepeatWrapping;
+		room_texture.repeat.set( 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER );
+
+
+		room = new THREE.Mesh(
+			new THREE.BoxGeometry( 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER ),
+			new THREE.MeshBasicMaterial({
+				map: room_texture,
+				side: THREE.BackSide
+			})
+			// new THREE.BoxGeometry( 6, 6, 6, 8, 8, 8 ),
+			// 		new THREE.MeshBasicMaterial( { color: 0x404040, wireframe: true } )	
+		);
+		room.position.y = LOCATION_MULTIPLIER;
+		scene.add( room );
 
 		if(reverse_action){
 			moveIlly(LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z));
