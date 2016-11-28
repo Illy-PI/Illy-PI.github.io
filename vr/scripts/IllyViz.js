@@ -260,7 +260,7 @@ var Viz = function(){
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
-			map: THREE.ImageUtils.loadTexture('../assets/images/particle3.png')
+			map: THREE.ImageUtils.loadTexture('/assets/images/particle3.png')
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/particle3.png')
 		});
 		point_cloud_material = new THREE.PointsMaterial( {
@@ -270,7 +270,7 @@ var Viz = function(){
 			depthWrite: false, 
 			transparent: true,
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/particle3.png')
-			map: THREE.ImageUtils.loadTexture('../assets/images/particle3.png')
+			map: THREE.ImageUtils.loadTexture('/assets/images/particle3.png')
 		});
 		var shell_material = new THREE.MeshBasicMaterial({
 			color: 0x101010, 
@@ -281,7 +281,7 @@ var Viz = function(){
 		});
 		core_material = new THREE.MeshBasicMaterial({
 			// map: THREE.ImageUtils.loadTexture('../assets/images/cloud.png'),
-			map: THREE.ImageUtils.loadTexture('../assets/images/iris.png'),
+			map: THREE.ImageUtils.loadTexture('/assets/images/iris.png'),
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/iris.png'),
 			// map: THREE.ImageUtils.loadTexture('https://dl.dropboxusercontent.com/u/265455/PI/assets/images/cloud.png'),
 			color: 0xff3010, 
@@ -342,7 +342,7 @@ var Viz = function(){
 		// 	// setupStage();
 		// }
 
-		var room_texture =new THREE.TextureLoader().load( "../assets/images/bg.png" );
+		var room_texture =new THREE.TextureLoader().load( "/assets/images/bg.png" );
 		room_texture.wrapS = THREE.RepeatWrapping;
 		room_texture.wrapT = THREE.RepeatWrapping;
 		room_texture.repeat.set( 2 * LOCATION_MULTIPLIER, 2 * LOCATION_MULTIPLIER );
