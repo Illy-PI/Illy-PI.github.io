@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Illy: A Primitive Intelligence</title>		
+	    <style type="text/css">
+<!--
+.style15 {	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+p.header {			font-size: small;
+}
+-->
+        </style>
+</head>
+	<script type="text/javascript" src="./scripts/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./scripts/TweenLite.min.js"></script>
+	<script type="text/javascript" src="./scripts/IllyAudio.js"></script>
+    <script type="text/javascript" src="./scripts/volume-meter.js"></script>
+    <script type="text/javascript" src="./scripts/three.js"></script>
+    <script type="text/javascript" src="./scripts/OrbitControls.js"></script>
+    <script type="text/javascript" src="./scripts/IllyViz.js"></script>
+    <script type="text/javascript" src="./scripts/IllySynth.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="./css/main.css"></link>
+    <link rel="stylesheet" href="./font-awesome-4.6.3/css/font-awesome.min.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+
+
+
+	<body>
+		 <script type="text/javascript">
+      $(document).ready(function(){
+        PitchDetection.start();
+        Viz.init();        
+      });
+    </script>
+    <div id="pi_face" style="text-align: center"></div>
+    <div id="status-init" class="status">Illy initializing...</div>
+    <div id="status-ready" class="status">Illy ready. Press and hold "left shift" to talk.</div>
+    <canvas id="eq" class="visualizer"></canvas> 
+    <div id="nav">
+        <div class="info"><i id="info-icon" class="fa fa-info-circle"></i><i id="top-icon" class="fa fa-bullseye" aria-hidden="true"></i></div>
+
+    </div>
+    <div id="about">
+        <span class="style15">Primitive Intelligence</span>
+        <hr noshade="noshade" color: #333333 />
+        <h3><span style="color:rgb(100,100,100)"><em>Primitive Intelligence </em> is currently in progress</span></h3>
+        <h3>This page is a combination of a proposal, current state of the work. Latest update: May 18, 2016.</h3>
+
+        <p><em>Primitive Intelligence</em> is a semi-intelligent system powered by Web Audio API, WebMIDI and WebGL. It understands what it is spoken to in a primitive way and responds to us in a primitive, emotional and simple way both sonically and visually. As opposed to the cutting edge AIs and interfaces like Siri, Cortana, OK Google, <em>Primitive Intelligence</em> does not understand natural language, defined commands or even language at all. It does not respond using fine-tuned intonations to deliver the information gathered from the cloud, it is not integrated with any services. It does not show maps, or pictures about the topic. Instead, as an antithesis, it only tries to understand the sonic properties of the spoken language like the attack, loudness, roughness and pitch. And responds sonically, in a non-language, musical, psychoacoustical way: without the symbolic sounds that we call language but with tonal sounds, timbre, frequency, consonance and rhythm. Visually, it shapes the visuals focusing on size, speed and color determined by its understanding and creating an abstract visual. Ignoring the symbolic data, like an infant, Primitive Intelligence tries to understand the emotion in the human voice - free from symbols of the language - and responds you with your emotions like sonic mirror to the soul. The aimed interactive experience brings questions about human sound and human-machine interface that we sometimes ignore in this age of information.</p>
+        
+        <h3><span style="color:rgb(100,100,100)">Instructions</span></h3>  
+        <p>For the best experience use Chrome/Opera or Firefox and be in a relatively silent space. Safari does not support technologies required for the system and it has not been tested with Edge.</p>   
+        <p>Primitive Intelligence requires you to have microphone and speakers. When requested please allow access to the microphone.</p>
+        <p>Primitive Intelligence is a push to talk system. Please use 'left shift' to start push to talk. And then talk/sing/yell to the system. And release to hear and see the the system's response.</p>
+
+        <h3><span style="color:rgb(100,100,100)">Primitive Intelligence Face/Visualizer</span></h3>
+        <p>Eventually, Primitive Intellegince will be separated from the documentation in this page and will be a full-screen experience with it is face/visualizer as the only interface. Currently the face is connected to the sound as follows:</p>
+        <p>- Pitch of the system's response/controls rotation speed of the outer ring. As well as the color of the core.</p>
+        <p>- Volume of the system's response controls the size of the core.</p>  
+        <div id="progress">  
+            <h3><span style="color:rgb(100,100,100)">Current progress:</span></h3>
+            <p>(v0.01): The system can respond to a talking by mimicking the fundamental frequency of the speech.</p>
+            <p>(v0.02): The intelligence learns how to listen to others:  push-to-talk (shift) to start the system, after release of the button the system responds. </p>
+            <p>(v0.03): The intelligence can show visually show basic emotions.</p>
+            <p>(v0.04): The intelligence can understand more frequencies from the speech. The system can detect the harmonics thus can detect dissonance and consonance.</p>
+            <p>(v0.05): The intelligence sharpens its existing skills: General polish and improvements.</p>
+            <p>(v0.1): The intelligence can control its facial expression while listening. A visualizer will be added to system that matches the aesthetics of the audio.</p>
+            <p>(v0.11): The intelligence sharpens its existing skills: General polish and improvements.</p>            
+            <p>(v0.2): The intelligence can understand more subtleties of human speech (v0.21): Analysis of the envolopes and matching them to emotions using Emotional Reaction Model (ERM) as proposed by Juslin and Vastfjal. (&ldquo;Emotional  responses to music: The need to consider underlying mechanisms.&rdquo; <em>Behavioral and Brain Sciences </em>31,  (2008): 559-621.)</p>
+            <p>(v0.22):The intelligence can use its new understanding to respond to people: Using the analysis results and ERM to create responses</p>
+            <p>(Current status): The intelligence sharpens its existing skills (v0.23): General polish and improvements.</p>
+            <p>&nbsp;</p>
+            <h3><span style="color:rgb(100,100,100)">Next Steps: </span></h3>
+        </div>
+        <div id="debug">
+            
+            <p class="header"></p>
+            <h3><span style="color:rgb(100,100,100)">Debug</span></h3>
+            <div id="debug-pitch"></div>
+            <div id="debug-volume"></div>
+            <p>Possible Harmonics</p>
+            <div id="debug-harmonic0"></div>
+            <div id="debug-harmonic1"></div>
+            <div id="debug-harmonic2"></div>
+            <div id="debug-harmonic3"></div>
+            <div id="debug-harmonic4"></div>        
+        </div>
+    </div>
+	
+    <!-- <p>Pitch controls rotation speed</p>
+    <p>Volume controls size</p> -->
+    <!-- <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="600px" width="960px"></canvas> -->
+    
+    <!--<script type='text/javascript'>
+      var Module = {
+        TOTAL_MEMORY: 268435456,
+        errorhandler: null,         // arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+        compatibilitycheck: null,
+        dataUrl: "Release/WebGL.data",
+        codeUrl: "Release/WebGL.js",
+        memUrl: "Release/WebGL.mem",
+      };
+    </script>
+    <script src="Release/UnityLoader.js"></script>-->
+</body>
+</html>
