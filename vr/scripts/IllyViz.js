@@ -221,7 +221,7 @@ var Viz = function(){
 		controller2.addEventListener( 'triggerdown', onViveTriggerDown );
 		controller2.addEventListener( 'triggerup', onViveTriggerUp );
 
-		if ( WEBVR.isLatestAvailable() === false ) {
+		if ( WEBVR.isAvailable() === false ) {
             document.body.appendChild( WEBVR.getMessage() );
         }
         else{        	
@@ -254,33 +254,37 @@ var Viz = function(){
 
 		// materials
 		mesh_material = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+
+		var particle_texture = new THREE.TextureLoader().load('../vr/assets/images/particle3.png');
 		sphere_material = new THREE.PointsMaterial( {
 			color: 0x102040, 
 			size: 0.6 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
-			map: THREE.ImageUtils.loadTexture('../vr/assets/images/particle3.png')
+			map: particle_texture
 		});
+
 		point_cloud_material = new THREE.PointsMaterial( {
 			color: 0xf0f0f0, 
 			size: 0.05 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
-			map: THREE.ImageUtils.loadTexture('../vr/assets/images/particle3.png')
+			map: particle_texture
 		});
 		var shell_material = new THREE.MeshBasicMaterial({
 			color: 0x101010, 
-			size: 0.1 * SIZE_MULTIPLIER, 
+			// size: 0.1 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
 		});
+		var iris_texture = new THREE.TextureLoader().load('../vr/assets/images/iris.png');
 		core_material = new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture('../vr/assets/images/iris.png'),
+			map: iris_texture,
 			color: 0xff3010, 
-			size: 0.5 * SIZE_MULTIPLIER, 
+			// size: 0.5 * SIZE_MULTIPLIER, 
 			blending: THREE.AdditiveBlending, 
 			depthWrite: false, 
 			transparent: true,
