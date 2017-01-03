@@ -161,6 +161,7 @@ var Viz = function(){
 		
 		effect.setSize( window.innerWidth, window.innerHeight );
 	}
+
 	
 	var init = function(){
 		// alert(scene_width + " " + scene_height);
@@ -486,7 +487,6 @@ var Viz = function(){
 					perspective_camera.position.y = LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y);
 					perspective_camera.lookAt(new THREE.Vector3(0,0,0));	
 				}	
-
 				defaultAction(timeDelta-opening_time);
 			}
 			else if(current_state == STATE.OPEN){
@@ -494,8 +494,18 @@ var Viz = function(){
 			}
 			
 			// renderer.render(scene, perspective_camera);
-			effect.requestAnimationFrame(update);
+			// effect.requestAnimationFrame(update);
+			requestAnimationFrame(update);
 
+			// controls.update();
+			// controller1.update();
+			// controller2.update();
+			// effect.render( scene, perspective_camera );
+		}
+
+		function updateVR(timeDelta){
+			effect.requestAnimationFrame(updateVR);
+			
 			controls.update();
 			controller1.update();
 			controller2.update();
@@ -503,6 +513,7 @@ var Viz = function(){
 		}
 
 		update();
+		updateVR();
 		
 	};
 
