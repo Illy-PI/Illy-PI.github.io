@@ -66,3 +66,11 @@ body {
 #exhibitions{
 	margin: 5% 5%;
 }
+
+#images{
+	margin: 5% 5%;
+}
+.image{
+	margin: 0 auto;
+	display: block;
+}
