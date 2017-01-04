@@ -95,6 +95,9 @@ var Viz = function(){
 		}
 	};
 
+	var oculus_touch_triggered = false;
+	var oculus_touch_gamepad_id = -1;
+
 	if(reverse_action){
 		camera_angle = {
 			current: {
@@ -174,6 +177,13 @@ var Viz = function(){
 
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize(scene_width, scene_height);
+
+
+		window.addEventListener("gamepadconnected", function(e) {
+			console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+			e.gamepad.index, e.gamepad.id,
+			e.gamepad.buttons.length, e.gamepad.axes.length);
+		});
 
 
 
@@ -509,12 +519,57 @@ var Viz = function(){
 			controls.update();
 			controller1.update();
 			controller2.update();
+			checkForOculusTouchInput();
 			effect.render( scene, perspective_camera );
 		}
 
 		update();
 		updateVR();
 		
+	};
+
+
+	var checkForOculusTouchInput = function(){
+		// console.log("checkForOculusTouchInput");
+		var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+		if (!gamepads) {
+			return;
+		}
+		// console.log(gamepads);
+		for (var i = gamepads.length - 1; i >= 0; i--) {
+			if(gamepads[i]){
+				// console.log(gamepads[i].buttons);
+				if(gamepads[i].id.indexOf("Oculus Touch") > -1){					
+					// console.log(gamepads[i].id);
+					// for (var j = gamepads[i].buttons.length - 1; j >= 0; j--) {
+					// 	console.log(j, gamepads[i].buttons[j]);
+					// 	// if(gamepads[i].buttons[j].value > 0){
+					// 	// 	console.log(j, gamepads[i].buttons[j]);
+					// 	// }						
+					// }
+					// console.log(gamepads[i].buttons[1].value);
+					if(gamepads[i].buttons[1].value > 0.9){						
+						if(!oculus_touch_triggered){
+							oculus_touch_gamepad_id = i;
+							console.log('trigger');
+							console.log('oculus_touch_gamepad_id', oculus_touch_gamepad_id);
+							oculus_touch_triggered = true;
+							IllyAudio.externalListen();
+						}
+					}
+					if(oculus_touch_gamepad_id > -1){
+						if(gamepads[oculus_touch_gamepad_id].buttons[1].value < 0.1){						
+							if(oculus_touch_triggered){
+								console.log('released trigger');
+								oculus_touch_triggered = false;
+								oculus_touch_gamepad_id = -1;
+								IllyAudio.externalReply();
+							}
+						}
+					}
+				}
+			}			
+		}
 	};
 
 	var openingAction = function(timeDelta){
@@ -824,6 +879,7 @@ var Viz = function(){
 		STATE: STATE,
 		getRepositionState: getRepositionState,
 		setLocationMultiplier: setLocationMultiplier,
-		setGlobalScale: setGlobalScale
+		setGlobalScale: setGlobalScale,
+		checkForOculusTouchInput: checkForOculusTouchInput
 	}
 }();
