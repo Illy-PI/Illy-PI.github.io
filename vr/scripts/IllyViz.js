@@ -158,6 +158,9 @@ var Viz = function(){
 	var controller1, controller2;
 	var room;
 
+	var particle_system;
+	var particles;
+
 	var onWindowResize = function() {
 		perspective_camera.aspect = window.innerWidth / window.innerHeight;
 		perspective_camera.updateProjectionMatrix();
@@ -369,6 +372,50 @@ var Viz = function(){
 		);
 		room.position.y = LOCATION_MULTIPLIER;
 		scene.add( room );
+
+
+		//particles in the space
+		var particleCount = 1800,
+	    particles = new THREE.Geometry(),
+	    particle_material = new THREE.ParticleBasicMaterial({
+		  color: 0xffffff,
+		  size: 4,
+		  map: particle_texture,
+		  blending: THREE.AdditiveBlending,
+		  transparent: true
+		});
+		
+
+
+		// now create the individual particles
+		for (var p = 0; p < particleCount; p++) {
+
+		  // create a particle with random
+		  // position values, -250 -> 250
+		  var particle_X = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+		      particle_Y = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+		      particle_Z = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+		      particle = new THREE.Vertex(
+		        new THREE.Vector3(particle_X, particle_Y, particle_Z)
+		      );
+
+		  // add it to the geometry
+		  particles.vertices.push(particle);
+		}
+
+		// create the particle system
+		var particle_system = new THREE.ParticleSystem(
+		    particles,
+		    particle_material);
+		particle_system.sortParticles = true;
+
+		// add it to the scene
+		scene.add(particle_system);
+
+
+		
+
+
 
 		if(reverse_action){
 			moveIlly(LOCATION_MULTIPLIER * Math.cos(camera_angle.current.x), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.y), LOCATION_MULTIPLIER * Math.cos(camera_angle.current.z));
