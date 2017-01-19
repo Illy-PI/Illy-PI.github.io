@@ -239,7 +239,8 @@ var Viz = function(){
             document.body.appendChild( WEBVR.getMessage() );
         }
         else{        	
-            document.body.appendChild( WEBVR.getButton(effect) );   
+            document.body.appendChild( WEBVR.getButton(effect) );  
+            stylizeENTERVRButton(); 
         }
 
         window.addEventListener( 'resize', onWindowResize, false );
@@ -907,6 +908,19 @@ var Viz = function(){
 
 	var setGlobalScale = function(new_scale){
 		SIZE_MULTIPLIER = new_scale;
+	};
+
+	var stylizeENTERVRButton = function(){
+		//get the button
+		var button = document.getElementsByTagName("button")[0];
+		button.innerHTML = "Experience in VR";
+		$(button).css({
+			"width": "120px",
+			"font-family": "Roboto",
+			"border": "solid white 1px"
+
+		});
+		// console.log(button);
 	};
 
 	// public methods
