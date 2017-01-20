@@ -189,6 +189,10 @@ var Viz = function(){
 		});
 
 
+		window.addEventListener("vrdisplaypresentchange", function(event){
+			analyzeWEBVRButton();
+		});
+
 
 		// camera
 		perspective_camera = new THREE.PerspectiveCamera(FOV, scene_width/scene_height, MINIMUM_DISTANCE, MAXIMUM_DISTANCE);
@@ -240,7 +244,7 @@ var Viz = function(){
         }
         else{        	
             document.body.appendChild( WEBVR.getButton(effect) );  
-            stylizeENTERVRButton(); 
+            stylizeWEBVRButton("Experience in VR"); 
         }
 
         window.addEventListener( 'resize', onWindowResize, false );
@@ -378,12 +382,12 @@ var Viz = function(){
 		//particles in the space
 		var particleCount = 1800,
 	    particles = new THREE.Geometry(),
-	    particle_material = new THREE.ParticleBasicMaterial({
-		  color: 0xffffff,
-		  size: 4,
-		  map: particle_texture,
-		  blending: THREE.AdditiveBlending,
-		  transparent: true
+	    particle_material = new THREE.PointsMaterial({
+			color: 0xffffff,
+			size: Math.random() * 0.1 * SIZE_MULTIPLIER, 
+			map: particle_texture,
+			blending: THREE.AdditiveBlending,
+			transparent: true
 		});
 		
 
@@ -391,21 +395,19 @@ var Viz = function(){
 		// now create the individual particles
 		for (var p = 0; p < particleCount; p++) {
 
-		  // create a particle with random
-		  // position values, -250 -> 250
-		  var particle_X = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
-		      particle_Y = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
-		      particle_Z = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
-		      particle = new THREE.Vertex(
-		        new THREE.Vector3(particle_X, particle_Y, particle_Z)
-		      );
+			// create a particle with random
+			// position values, -250 -> 250
+			var particle_X = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+				particle_Y = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+				particle_Z = Math.random() * 5 * LOCATION_MULTIPLIER - 5 * LOCATION_MULTIPLIER/2,
+				particle = new THREE.Vector3(particle_X, particle_Y, particle_Z);
 
-		  // add it to the geometry
-		  particles.vertices.push(particle);
+			// add it to the geometry
+			particles.vertices.push(particle);
 		}
 
 		// create the particle system
-		var particle_system = new THREE.ParticleSystem(
+		var particle_system = new THREE.Points(
 		    particles,
 		    particle_material);
 		particle_system.sortParticles = true;
@@ -910,17 +912,35 @@ var Viz = function(){
 		SIZE_MULTIPLIER = new_scale;
 	};
 
-	var stylizeENTERVRButton = function(){
+	var stylizeWEBVRButton = function(new_label){
 		//get the button
 		var button = document.getElementsByTagName("button")[0];
-		button.innerHTML = "Experience in VR";
+		// console.log("new button text", new_label);
+		button.innerHTML = new_label;//new_label;
+		$(button).text(new_label);
+		$(button).html(new_label);
 		$(button).css({
 			"width": "120px",
 			"font-family": "Roboto",
 			"border": "solid white 1px"
 
 		});
+		console.log('sty;lized', button);
 		// console.log(button);
+	};
+
+	var analyzeWEBVRButton = function(){
+		// console.log('testing');
+		var button = document.getElementsByTagName("button")[0];
+		// console.log('analyzing', button);
+		var button_label;
+		if(button.innerHTML == "EXIT VR"){
+			button_label = "Exit VR";
+		}
+		else{
+			button_label = "Experience in VR";
+		}
+		stylizeWEBVRButton(button_label);
 	};
 
 	// public methods
