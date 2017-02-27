@@ -218,17 +218,34 @@ var Viz = function(){
 		controller1 = new THREE.ViveController( 0 );
 		controller1.standingMatrix = controls.getStandingMatrix();
 		scene.add( controller1 );
+
 		controller2 = new THREE.ViveController( 1 );
 		controller2.standingMatrix = controls.getStandingMatrix();
 		scene.add( controller2 );
+
 		var loader = new THREE.OBJLoader();
 		loader.setPath( 'models/obj/vive-controller/' );
 		loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
 			var loader = new THREE.TextureLoader();
 			loader.setPath( 'models/obj/vive-controller/' );
+
 			var controller = object.children[ 0 ];
-			controller.material.map = loader.load( 'onepointfive_texture.png' );
-			controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+			var temp_material = new THREE.MeshLambertMaterial( {
+			// var temp_material = new THREE.PointsMaterial({
+				// map: loader.load( 'onepointfive_texture.png' ),
+				// specularMap: loader.load( 'onepointfive_spec.png' ),
+				// blending: THREE.AdditiveBlending,
+				emissive: 0x202020,
+				color: 0x00aa00,
+				wireframe: true
+			} );
+
+			// controller.material.blending= THREE.AdditiveBlending;
+			controller.material = temp_material;
+
+			// controller.material.map = loader.load( 'onepointfive_texture.png' );
+			// controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+
 			controller1.add( object.clone() );
 			controller2.add( object.clone() );
 		} );
@@ -569,7 +586,7 @@ var Viz = function(){
 			controls.update();
 			controller1.update();
 			controller2.update();
-			checkForOculusTouchInput();
+			// checkForOculusTouchInput();
 			effect.render( scene, perspective_camera );
 		}
 
