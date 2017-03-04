@@ -44,6 +44,16 @@ IllyAudio = function() {
 		isListening = false,
 		isReplying = false;
 
+	// long term memory
+	var long_memory_pitch = [],
+		long_memory_h0 = [],
+		long_memory_h1 = [],
+		long_memory_h2 = [],
+		long_memory_h3 = [],
+		long_average_pitch = [],
+		long_memory_volume = [],
+		long_average_volume = [];
+
 	var bufferLength;
 	var dataArray;
 
@@ -272,7 +282,8 @@ IllyAudio = function() {
 
 	var reply = function(){
 		isListening = false;
-		oscillator_playing = false;
+		oscillator_playing = false;		
+
 
 		// visualizer
 		// var average_volume = 0.8 + 4 * average_volume/memory_volume.length;
@@ -282,6 +293,11 @@ IllyAudio = function() {
 		}
 		average_pitch = average_pitch/memory_pitch.length;
 		// console.log(average_volume);
+
+		// now make it learn
+		learn();
+		selectReplySource();
+		//
 
 		Viz.Respond();
 		if(memory_pitch[0]){
@@ -303,6 +319,33 @@ IllyAudio = function() {
 		fadeEQ(0, 200);
 		// console.log(memory);
 	};
+
+	var learn = function(){
+		long_memory_pitch.push(memory_pitch);
+		long_memory_h0.push(memory_h0);
+		long_memory_h1.push(memory_h1);
+		long_memory_h2.push(memory_h2);
+		long_memory_h3.push(memory_h3);
+
+		long_average_volume.push(average_volume);
+		long_average_pitch.push(average_pitch);
+		long_memory_volume.push(memory_volume);
+	}
+
+	var selectReplySource = function(){
+		if(Math.random > 0.5){
+			var memory_index = Math.round(Math.random * long_memory_pitch.length);
+			memory_pitch = long_memory_pitch[memory_index];
+			memory_h0 = long_memory_h0[memory_index];
+			memory_h1 = long_memory_h1[memory_index];
+			memory_h2 = long_memory_h2[memory_index];
+			memory_h3 = long_memory_h3[memory_index];
+
+			average_volume = long_average_volume[memory_index];
+			average_pitch = long_average_pitch[memory_index];
+			memory_volume = long_memory_volume[memory_index];
+		}
+	}
 
 	var checkPitchArray = function(in_array){
 		// console.log('memory_pitch.length', in_array.length);
