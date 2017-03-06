@@ -187,9 +187,15 @@ IllySynth = function(){
 	};
 
 	var setFreq = function(index, freq){
-		instruments[index].osc1.frequency.value = freq;
-		instruments[index].osc2.frequency.value = freq * instruments[index].osc2_freq;
-		if(instruments[index].osc3){
+		if(freq <= 22050){
+			instruments[index].osc1.frequency.value = freq;
+		}
+
+		if(freq * instruments[index].osc2_freq <= 22050){
+			instruments[index].osc2.frequency.value = freq * instruments[index].osc2_freq;
+		}
+				
+		if(instruments[index].osc3 && freq * instruments[index].osc3_freq <= 22050){
 			instruments[index].osc3.frequency.value = freq * instruments[index].osc3_freq;
 		}
 	};

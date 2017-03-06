@@ -53,6 +53,7 @@ IllyAudio = function() {
 		long_average_pitch = [],
 		long_memory_volume = [],
 		long_average_volume = [];
+		memory_rate = 0.25;
 
 	var bufferLength;
 	var dataArray;
@@ -179,7 +180,7 @@ IllyAudio = function() {
 
 				// Error callback
 				function(err) {
-					console.log('The following gUM error occured: ' + err);
+					console.log('The following getUserMedia error occured: ' + err);
 				}
 			);
 		} else {
@@ -200,16 +201,13 @@ IllyAudio = function() {
 	var initControls = function(){
 		document.addEventListener("keydown", function(event){
 			if(event.keyCode == 16 && !oscillator_playing) { //
-				//listen
 				listen();
-				console.log('listen long_memory_pitch', long_memory_pitch);
 			}
 		});	
 
 		document.addEventListener("keyup", function(event){
 			if(event.keyCode == 16 && oscillator_playing) { //
 				reply();
-				console.log('reply long_memory_pitch', long_memory_pitch);
 			}
 		});
 
@@ -264,7 +262,7 @@ IllyAudio = function() {
 	var listen = function(){
 		if(Viz.getCurrentState() == Viz.STATE.WAIT){
 			current_response_mode = Math.floor((Math.random() * 4.99));
-			console.log('current_response_mode', current_response_mode);
+			// console.log('current_response_mode', current_response_mode);
 			arpeggiator = Math.random();
 			memory_pitch = [];
 			memory_h0 = [];
@@ -297,11 +295,11 @@ IllyAudio = function() {
 		// console.log(average_volume);
 
 		// now make it learn
-		console.log('long_memory_pitch before learn',long_memory_pitch);
+		// console.log('long_memory_pitch before learn',long_memory_pitch);
 		if(memory_pitch[0]){
 			learn();
 		}
-		console.log('long_memory_pitch after learn',long_memory_pitch);
+		// console.log('long_memory_pitch after learn',long_memory_pitch);
 		selectReplySource();
 		//
 
@@ -327,45 +325,49 @@ IllyAudio = function() {
 	};
 
 	var learn = function(){
-		var memory_pitch_clone = memory_pitch.slice(0);
-		// long_memory_pitch = long_memory_pitch.concat([memory_pitch_clone]);
-		long_memory_pitch.push(memory_pitch_clone);
-		var memory_h0_clone = memory_h0.slice(0);
-		long_memory_h0.push(memory_h0_clone);
-		var memory_h1_clone = memory_h1.slice(0);
-		long_memory_h1.push(memory_h1_clone);
-		var memory_h2_clone = memory_h2.slice(0);
-		long_memory_h2.push(memory_h2_clone);
-		var memory_h3_clone = memory_h3.slice(0);
-		long_memory_h3.push(memory_h3_clone);
+		// long_memory_pitch = long_memory_pitch.concat([JSON.parse(JSON.stringify(memory_pitch))]);
+		long_memory_pitch.push(JSON.parse(JSON.stringify(memory_pitch)));
+		// var memory_h0_clone = memory_h0.slice(0);
+		long_memory_h0.push(JSON.parse(JSON.stringify(memory_h0)));
+		// var memory_h1_clone = memory_h1.slice(0);
+		long_memory_h1.push(JSON.parse(JSON.stringify(memory_h1)));
+		// var memory_h2_clone = memory_h2.slice(0);
+		long_memory_h2.push(JSON.parse(JSON.stringify(memory_h2)));
+		// var memory_h3_clone = memory_h3.slice(0);
+		long_memory_h3.push(JSON.parse(JSON.stringify(memory_h3)));
 
 		long_average_volume.push(average_volume);
+		// console.log(long_average_volume)
 		long_average_pitch.push(average_pitch);
 		long_memory_volume.push(memory_volume);
 
-		console.log('learned', memory_pitch.length, long_memory_pitch);
+		// console.log('learned', memory_pitch.length, long_memory_pitch);
 	}
 
 	var selectReplySource = function(){
-		console.log('selecting reply source');
-		if(Math.random() > 0.5 && long_memory_pitch.length > 0){
-			console.log('replying from memory', long_memory_pitch);
+		// console.log('selecting reply source');
+		if(Math.random() > memory_rate && long_memory_pitch.length > 0){			
 			var memory_index = Math.round(Math.random() * (long_memory_pitch.length -1));
-			console.log(memory_index);
-			memory_pitch = long_memory_pitch[memory_index];
-			console.log ('memory_pitch', memory_pitch);
-			memory_h0 = long_memory_h0[memory_index];
-			console.log ('memory_h0', memory_h0);
-			memory_h1 = long_memory_h1[memory_index];
-			console.log ('memory_h1', memory_h1);
-			memory_h2 = long_memory_h2[memory_index];
-			console.log ('memory_h2', memory_h2);
-			memory_h3 = long_memory_h3[memory_index];
-			console.log ('memory_h3', memory_h3);
+			// console.log('replying from memory', long_memory_pitch, memory_index);
+			if(long_memory_pitch[memory_index].length > 0) {
+				memory_pitch = long_memory_pitch[memory_index];
+				// console.log ('memory_pitch', memory_pitch);
+				memory_h0 = long_memory_h0[memory_index];
+				// console.log ('memory_h0', memory_h0);
+				memory_h1 = long_memory_h1[memory_index];
+				// console.log ('memory_h1', memory_h1);
+				memory_h2 = long_memory_h2[memory_index];
+				// console.log ('memory_h2', memory_h2);
+				memory_h3 = long_memory_h3[memory_index];
+				// console.log ('memory_h3', memory_h3);
 
-			average_volume = long_average_volume[memory_index];
-			average_pitch = long_average_pitch[memory_index];
-			memory_volume = long_memory_volume[memory_index];
+				average_volume = long_average_volume[memory_index];
+				average_pitch = long_average_pitch[memory_index];
+				memory_volume = long_memory_volume[memory_index];
+			}
+			// else{
+			// 	console.log("BORKED MEMORY");
+			// }
 		}
 	}
 
@@ -503,7 +505,7 @@ IllyAudio = function() {
 			IllySynth.setFreq(4, 0);
 
 			if(Viz.getRepositionState()){
-				console.log(Viz.getRepositionState());
+				// console.log(Viz.getRepositionState());
 				resetVisualizer();	
 				fadeEQ(0.6, 400);
 			}

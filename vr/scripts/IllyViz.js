@@ -513,7 +513,7 @@ var Viz = function(){
 				}
 				else{
 					if(!reposition_y){
-						console.log('y done');
+						// console.log('y done');
 						reposition_y = true;
 					}
 					camera_angle.current.y = camera_angle.default.y;					
@@ -529,7 +529,7 @@ var Viz = function(){
 				}
 				else{
 					if(!reposition_z){
-						console.log('z done');
+						// console.log('z done');
 						reposition_z = true;
 					}
 					camera_angle.current.z = camera_angle.default.z;
@@ -545,7 +545,7 @@ var Viz = function(){
 				}
 				else{
 					if(!reposition_x){
-						console.log('x done');
+						// console.log('x done');
 						reposition_x = true;
 					}
 					camera_angle.current.x = camera_angle.default.x;
