@@ -74,7 +74,7 @@ var Viz = function(){
 	// controller call location
 	var call_location;
 	var call_to_location = false;
-	var call_to_speed = 0.05;
+	var call_to_speed = 0.005;
 
 	// flags
 	var reverse_action = true;
@@ -470,6 +470,9 @@ var Viz = function(){
 						arrived = false;
 						temp_location.x = current_location.x - call_to_speed;
 					}
+					else{
+						temp_location.x = current_location.x;
+					}
 
 					if(target_location.y - call_to_speed > current_location.y){
 						temp_location.y = current_location.y + call_to_speed;
@@ -478,6 +481,9 @@ var Viz = function(){
 					else if(target_location.y + call_to_speed < current_location.y){
 						arrived = false;
 						temp_location.y = current_location.y - call_to_speed;
+					}
+					else{
+						temp_location.y = current_location.y;
 					}
 
 					if(target_location.z - call_to_speed > current_location.z){
@@ -488,9 +494,13 @@ var Viz = function(){
 						arrived = false;
 						temp_location.z = current_location.z - call_to_speed;
 					}
+					else{
+						temp_location.z = current_location.z;
+					}
+
 
 					// calculate the difference
-					moveIlly(current_location.x, current_location.y, current_location.z);
+					moveIlly(temp_location.x, temp_location.y, temp_location.z);
 					if(arrived){
 						call_to_location = false;
 					}
@@ -891,6 +901,7 @@ var Viz = function(){
 	};
 
 	var Listen = function (){
+		call_to_location = false;
 		current_state = STATE.LISTEN;		
 		camera_angle.listening.x = Math.random() * 2 * Math.PI - Math.PI;
 		camera_angle.listening.y = Math.random() * 2 * Math.PI - Math.PI;
