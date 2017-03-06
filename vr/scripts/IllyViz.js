@@ -762,7 +762,7 @@ var Viz = function(){
 									opacity: 0,
 									}, 1000, function() {
 								});
-							}, 2000);
+							}, 4000);
 					});
 					
 					current_state = STATE.WAIT;

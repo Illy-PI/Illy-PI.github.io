@@ -29,7 +29,10 @@
 
 	<body>
     <script type="text/javascript">
-        $(document).ready(function(){            
+        $(document).ready(function(){  
+            if(WEBVR.isAvailable()){
+                $('#status-ready').text('Illy ready. VR controls: Press and hold trigger-button to talk. Press on the thumbstick/trackpad to call Illy.')
+            }          
             IllyAudio.start();
             Viz.init();        
         });
