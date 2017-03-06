@@ -71,6 +71,11 @@ var Viz = function(){
 	var opening_wait_time_current = 0;
 	var opening_wait_time_target = 30;
 
+	// controller call location
+	var call_location;
+	var call_to_location = false;
+	var call_to_speed = 0.05;
+
 	// flags
 	var reverse_action = true;
 
@@ -255,6 +260,9 @@ var Viz = function(){
 
 		controller2.addEventListener( 'triggerdown', onViveTriggerDown );
 		controller2.addEventListener( 'triggerup', onViveTriggerUp );
+
+		controller1.addEventListener('thumbpaddown', onThumbDown1);
+		controller2.addEventListener('thumbpaddown', onThumbDown2);
 
 		if ( WEBVR.isAvailable() === false ) {
             document.body.appendChild( WEBVR.getMessage() );
@@ -447,6 +455,46 @@ var Viz = function(){
 			// console.log(timeDelta);
 			if(current_state == STATE.WAIT){
 				defaultAction(timeDelta-opening_time);
+				if(call_to_location){
+					var current_location = core.position;
+					var temp_location = new THREE.Vector3();
+					var target_location = call_location;
+
+					var arrived = true
+
+					if(target_location.x - call_to_speed > current_location.x){
+						temp_location.x = current_location.x + call_to_speed;
+						arrived = false;
+					}
+					else if(target_location.x + call_to_speed < current_location.x){
+						arrived = false;
+						temp_location.x = current_location.x - call_to_speed;
+					}
+
+					if(target_location.y - call_to_speed > current_location.y){
+						temp_location.y = current_location.y + call_to_speed;
+						arrived = false;
+					}
+					else if(target_location.y + call_to_speed < current_location.y){
+						arrived = false;
+						temp_location.y = current_location.y - call_to_speed;
+					}
+
+					if(target_location.z - call_to_speed > current_location.z){
+						temp_location.z = current_location.z + call_to_speed;
+						arrived = false;
+					}
+					else if(target_location.z + call_to_speed < current_location.z){
+						arrived = false;
+						temp_location.z = current_location.z - call_to_speed;
+					}
+
+					// calculate the difference
+					moveIlly(current_location.x, current_location.y, current_location.z);
+					if(arrived){
+						call_to_location = false;
+					}
+				}
 				// defaultAction(timeDelta);
 			}
 			else if(current_state == STATE.LISTEN){
@@ -568,6 +616,9 @@ var Viz = function(){
 			}
 			else if(current_state == STATE.OPEN){
 				openingAction(timeDelta);
+			}
+			else if(current_state == STATE.MOVINGTOCONTROLLER){
+				defaultAction(timeDelta-opening_time);
 			}
 			
 			// renderer.render(scene, perspective_camera);
@@ -918,6 +969,21 @@ var Viz = function(){
 	var onViveTriggerDown = function(){
 		// console.log("This is down");
 		IllyAudio.externalListen();
+	};
+
+	var onThumbDown1 = function(){
+		onThumbDown(controller1.position);
+	};
+
+	var onThumbDown2 = function(){
+		onThumbDown(controller2.position);
+	};
+
+	var onThumbDown = function(location){
+		if(current_state == STATE.WAIT){
+			call_to_location = true;
+			call_location = location;	
+		}
 	};
 
 	// for quick debug for VR
