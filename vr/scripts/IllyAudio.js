@@ -202,12 +202,14 @@ IllyAudio = function() {
 			if(event.keyCode == 16 && !oscillator_playing) { //
 				//listen
 				listen();
+				console.log('listen long_memory_pitch', long_memory_pitch);
 			}
 		});	
 
 		document.addEventListener("keyup", function(event){
 			if(event.keyCode == 16 && oscillator_playing) { //
 				reply();
+				console.log('reply long_memory_pitch', long_memory_pitch);
 			}
 		});
 
@@ -295,7 +297,11 @@ IllyAudio = function() {
 		// console.log(average_volume);
 
 		// now make it learn
-		learn();
+		console.log('long_memory_pitch before learn',long_memory_pitch);
+		if(memory_pitch[0]){
+			learn();
+		}
+		console.log('long_memory_pitch after learn',long_memory_pitch);
 		selectReplySource();
 		//
 
@@ -321,25 +327,41 @@ IllyAudio = function() {
 	};
 
 	var learn = function(){
-		long_memory_pitch.push(memory_pitch);
-		long_memory_h0.push(memory_h0);
-		long_memory_h1.push(memory_h1);
-		long_memory_h2.push(memory_h2);
-		long_memory_h3.push(memory_h3);
+		var memory_pitch_clone = memory_pitch.slice(0);
+		// long_memory_pitch = long_memory_pitch.concat([memory_pitch_clone]);
+		long_memory_pitch.push(memory_pitch_clone);
+		var memory_h0_clone = memory_h0.slice(0);
+		long_memory_h0.push(memory_h0_clone);
+		var memory_h1_clone = memory_h1.slice(0);
+		long_memory_h1.push(memory_h1_clone);
+		var memory_h2_clone = memory_h2.slice(0);
+		long_memory_h2.push(memory_h2_clone);
+		var memory_h3_clone = memory_h3.slice(0);
+		long_memory_h3.push(memory_h3_clone);
 
 		long_average_volume.push(average_volume);
 		long_average_pitch.push(average_pitch);
 		long_memory_volume.push(memory_volume);
+
+		console.log('learned', memory_pitch.length, long_memory_pitch);
 	}
 
 	var selectReplySource = function(){
-		if(Math.random > 0.5){
-			var memory_index = Math.round(Math.random * long_memory_pitch.length);
+		console.log('selecting reply source');
+		if(Math.random() > 0.5 && long_memory_pitch.length > 0){
+			console.log('replying from memory', long_memory_pitch);
+			var memory_index = Math.round(Math.random() * (long_memory_pitch.length -1));
+			console.log(memory_index);
 			memory_pitch = long_memory_pitch[memory_index];
+			console.log ('memory_pitch', memory_pitch);
 			memory_h0 = long_memory_h0[memory_index];
+			console.log ('memory_h0', memory_h0);
 			memory_h1 = long_memory_h1[memory_index];
+			console.log ('memory_h1', memory_h1);
 			memory_h2 = long_memory_h2[memory_index];
+			console.log ('memory_h2', memory_h2);
 			memory_h3 = long_memory_h3[memory_index];
+			console.log ('memory_h3', memory_h3);
 
 			average_volume = long_average_volume[memory_index];
 			average_pitch = long_average_pitch[memory_index];
