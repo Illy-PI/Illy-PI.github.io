@@ -42,6 +42,7 @@ body {
 }
 
 #nav{
+	display: none;
 	position: fixed;
 	text-align: center;
 	vertical-align: middle;
