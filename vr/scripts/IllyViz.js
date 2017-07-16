@@ -255,6 +255,18 @@ var Viz = function(){
 			controller2.add( object.clone() );
 		} );
 
+		// // var controller_geometry = new THREE.TorusBufferGeometry(0.03, 0.01, 16, 40 );
+		// var controller_geometry = new THREE.DodecahedronGeometry(0.03, 1);
+		// var controller_material = new THREE.MeshBasicMaterial( { 
+		// 	emissive: 0x202020,
+		// 	color: 0xaaaaaa,
+		// 	wireframe: true
+		// } );
+		// var controller_mesh = new THREE.Mesh( controller_geometry, controller_material );
+		// controller1.add( controller_mesh.clone() );
+		// controller2.add( controller_mesh.clone() );
+
+
 		controller1.addEventListener( 'triggerdown', onViveTriggerDown );
 		controller1.addEventListener( 'triggerup', onViveTriggerUp );
 
@@ -649,6 +661,7 @@ var Viz = function(){
 			controller2.update();
 			// checkForOculusTouchInput();
 			effect.render( scene, perspective_camera );
+			renderer.render( scene, perspective_camera );
 		}
 
 		update();
