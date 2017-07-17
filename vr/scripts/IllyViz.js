@@ -228,43 +228,6 @@ var Viz = function(){
 		controller2.standingMatrix = controls.getStandingMatrix();
 		scene.add( controller2 );
 
-		var loader = new THREE.OBJLoader();
-		loader.setPath( 'models/obj/vive-controller/' );
-		loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
-			var loader = new THREE.TextureLoader();
-			loader.setPath( 'models/obj/vive-controller/' );
-
-			var controller = object.children[ 0 ];
-			var temp_material = new THREE.MeshLambertMaterial( {
-			// var temp_material = new THREE.PointsMaterial({
-				// map: loader.load( 'onepointfive_texture.png' ),
-				// specularMap: loader.load( 'onepointfive_spec.png' ),
-				// blending: THREE.AdditiveBlending,
-				emissive: 0x202020,
-				color: 0x00aa00,
-				wireframe: true
-			} );
-
-			// controller.material.blending= THREE.AdditiveBlending;
-			controller.material = temp_material;
-
-			// controller.material.map = loader.load( 'onepointfive_texture.png' );
-			// controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
-
-			controller1.add( object.clone() );
-			controller2.add( object.clone() );
-		} );
-
-		// // var controller_geometry = new THREE.TorusBufferGeometry(0.03, 0.01, 16, 40 );
-		// var controller_geometry = new THREE.DodecahedronGeometry(0.03, 1);
-		// var controller_material = new THREE.MeshBasicMaterial( { 
-		// 	emissive: 0x202020,
-		// 	color: 0xaaaaaa,
-		// 	wireframe: true
-		// } );
-		// var controller_mesh = new THREE.Mesh( controller_geometry, controller_material );
-		// controller1.add( controller_mesh.clone() );
-		// controller2.add( controller_mesh.clone() );
 
 
 		controller1.addEventListener( 'triggerdown', onViveTriggerDown );
@@ -667,6 +630,55 @@ var Viz = function(){
 		update();
 		updateVR();
 		
+
+		window.a = controller1;
+
+		var temp_material = new THREE.MeshLambertMaterial( {
+		// var temp_material = new THREE.PointsMaterial({
+			// map: loader.load( 'onepointfive_texture.png' ),
+			// specularMap: loader.load( 'onepointfive_spec.png' ),
+			// blending: THREE.AdditiveBlending,
+			emissive: 0x202020,
+			color: 0x00aa00,
+			wireframe: true
+		} );
+
+		if(controller1.getGamepad().id.indexOf('Oculus') > -1) {
+			var loader = new THREE.OBJLoader();
+			loader.setPath( 'models/obj/oculus-controller/' );
+			loader.load( 'OculusTouchL.obj', function ( object ) {
+				console.log(object);
+				var controller = object.children[ 0 ];
+				
+
+				// controller.material.blending= THREE.AdditiveBlending;
+				// controller.material = temp_material;
+
+				// controller.material.map = loader.load( 'onepointfive_texture.png' );
+				// controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+
+				controller1.add( object.clone() );
+				controller2.add( object.clone() );
+			});
+		}	
+		else {
+			var loader = new THREE.OBJLoader();
+			loader.setPath( 'models/obj/vive-controller/' );
+			loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
+				var controller = object.children[ 0 ];
+				
+
+				// controller.material.blending= THREE.AdditiveBlending;
+				controller.material = temp_material;
+
+				// controller.material.map = loader.load( 'onepointfive_texture.png' );
+				// controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+
+				controller1.add( object.clone() );
+				controller2.add( object.clone() );
+			});
+		}		
+
 	};
 
 
